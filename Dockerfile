@@ -47,4 +47,5 @@ RUN echo "Using ${APP_ENV} environment"
 
 # Command to run the application
 ENTRYPOINT ["/app/scripts/docker-entrypoint.sh"]
-CMD ["/app/.venv/bin/uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"] 
+# changes 01/20/2026: KA - uses API_MODULE exported from Makefile
+CMD ["/app/.venv/bin/uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"] 

@@ -315,12 +315,20 @@ class LangGraphAgent:
         config = {
             "configurable": {"thread_id": session_id},
             "callbacks": [CallbackHandler()],
-            "metadata": {
-                "user_id": user_id,
-                "session_id": session_id,
-                "environment": settings.ENVIRONMENT.value,
-                "debug": settings.DEBUG,
+            # Jan 22 2026, KA : Commennted 326-331 metadata section and modified by adding 319-324. Reason langfuse keys are not correct
+             "metadata": {                                                                                                                                                       
+                "langfuse_user_id": str(user_id),                                                                                                                                    
+                "langfuse_session_id": session_id,                                                                                                                              
+                "langfuse_tags": [settings.ENVIRONMENT.value],                                                                                                                  
+                "environment": settings.ENVIRONMENT.value,                                                                                                                      
+                "debug": settings.DEBUG,                                                                                                                                        
             },
+            #"metadata": {
+            #    "user_id": user_id,
+            #    "session_id": session_id,
+            #    "environment": settings.ENVIRONMENT.value,
+            #    "debug": settings.DEBUG,
+            #},
         }
         relevant_memory = (
             await self._get_relevant_memory(user_id, messages[-1].content)
@@ -355,17 +363,26 @@ class LangGraphAgent:
         """
         config = {
             "configurable": {"thread_id": session_id},
-            "callbacks": [
-                CallbackHandler(
-                    environment=settings.ENVIRONMENT.value, debug=False, user_id=user_id, session_id=session_id
-                )
-            ],
-            "metadata": {
-                "user_id": user_id,
-                "session_id": session_id,
-                "environment": settings.ENVIRONMENT.value,
-                "debug": settings.DEBUG,
+            # Jan 21 2026, KA : Commennted 367-377, and modified by adding 359-366
+            "callbacks": [CallbackHandler()],                                                                                                                                   
+            "metadata": {                                                                                                                                                       
+                "langfuse_user_id": str(user_id),                                                                                                                                    
+                "langfuse_session_id": session_id,                                                                                                                              
+                "langfuse_tags": [settings.ENVIRONMENT.value],                                                                                                                  
+                "environment": settings.ENVIRONMENT.value,                                                                                                                      
+                "debug": settings.DEBUG,                                                                                                                                        
             },
+            #"callbacks": [
+            #    CallbackHandler(
+            #        environment=settings.ENVIRONMENT.value, debug=False, user_id=user_id, session_id=session_id
+            #    )
+            #],
+            #"metadata": {
+            #    "user_id": user_id,
+            #    "session_id": session_id,
+            #    "environment": settings.ENVIRONMENT.value,
+            #    "debug": settings.DEBUG,
+            #},
         }
         if self._graph is None:
             self._graph = await self.create_graph()

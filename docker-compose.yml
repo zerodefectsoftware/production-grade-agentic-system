@@ -29,7 +29,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app/src
+    # changes 01/20/2026: KA - ./app -> ./src
+      - ./src:/app/src
       - ./logs:/app/logs
     env_file:
       - .env.${APP_ENV:-development}

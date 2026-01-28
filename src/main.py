@@ -21,7 +21,8 @@ from langfuse import Langfuse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from src.interface.api import api_router
+#from src.interface.api import api_router
+from src.interface.router import api_router
 from src.config.settings import settings
 from src.system.rate_limit import limiter
 from src.system.logs import logger
@@ -53,6 +54,8 @@ async def lifespan(app: FastAPI):
         api_prefix=settings.API_V1_STR,
     )
     yield
+    # 01/22/2026: KA Added flush() becuase no traces were sent to langfuse although README mentions it
+    langfuse.flush()
     logger.info("application_shutdown")
 
 
