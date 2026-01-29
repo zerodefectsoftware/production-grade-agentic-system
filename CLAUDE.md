@@ -6,6 +6,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a production-grade agentic AI system built with FastAPI, LangGraph, and PostgreSQL. The system supports multi-environment deployments (development, staging, production) with comprehensive observability through Prometheus and Grafana. It uses LangGraph for agent orchestration with checkpointing, Langfuse for LLM tracing, and mem0ai for long-term memory management.
 
+## Hairstyle Recommendations API (New Feature)
+
+**Design Document:** `docs/HAIRSTYLE_API_DESIGN.md`
+
+A parallel application for AI-powered hairstyle recommendations:
+
+- **Location:** `/hairstyle` folder (separate from `/src` chatbot)
+- **Port:** 8001 (chatbot on 8000)
+- **Database:** Separate `hairstyle_db` (not shared with chatbot)
+- **Auth:** Shared JWT secret (Hairstyle owns users for now)
+
+**MVP Roadmap:**
+- MVP1: Recommendations (photo → AI analysis → N hairstyle images)
+- MVP2: Customization (modify selected hairstyle)
+- MVP3: Chat with AI stylist
+
+**Key Design Decisions:**
+- LangGraph workflow with 4 nodes (validate → generate_prompts → generate_images → finalize)
+- Parallel image generation
+- Multi-provider LLM support: Gemini 2.5/3 (primary, lower cost) → Grok → OpenAI (fallback)
+- SDK strategy: OpenAI SDK when compatible, provider SDK when not (Gemini for images)
+- Delivery: SSE (streaming), Sync, and Polling modes
+- Hybrid image storage: temp (24h expiry) until user explicitly saves
+- Resilience patterns copied from chatbot (retry, circuit breaker, fallback chain)
+
+See the full design document for architecture, database schema, API endpoints, and implementation details.
+
 ## Environment Setup
 
 ### Initial Setup
